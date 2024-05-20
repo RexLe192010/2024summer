@@ -1,0 +1,5 @@
+https://leanprover-community.github.io/mathematics_in_lean/
+这是一个新网站，其实跟昨天的是一样的，不过我准备照着这个来学习lean
+
+
+不过最先需要做的是把copilot装起来
