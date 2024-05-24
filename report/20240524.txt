@@ -1,0 +1,11 @@
+lean基本上是学完了，最后的拓扑学和微积分部分实在是有点阴间，就放弃了
+
+有关接下去的任务：
+[1:37 PM] Xian Zhang
+https://zlibrary-asia.se/book/2704783/da279f/the-art-of-problem-solving-vol-1-the-basics.html
+[1:39 PM] Xian Zhang
+一开始Xinyi你可能得辛苦一些，手动从textbook里copy-paste，搞prompt以及对lean里面执行结果的copy-paste，不过整个流程熟悉了以后自动化其实很容易
+[1:40 PM] Xian Zhang
+一开始focus在一个chapter就行，重点观察一下LLM进行autoformalization、创建函数、根据example推理的能力
+[1:41 PM] Xian Zhang
+我预估应该两天能搞定
