@@ -1,0 +1,46 @@
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are an AI agent that translates natural language to Lean4. The input is always a paragraph in natural language from some Mathematics textbook. You should conclude the paragraph in Lean4, by generating examples, definitions, functions, or theorems, so that it becomes a Lean4 library for further use."
+    },
+    {
+      "role": "user",
+      "content": "EXAMPLE 26-12 There is a 20% chance it will rain today. If it rains, there is a 10% chance that we will be allowed to go outside; otherwise, there is an 80% chance we will be able to go outside. What is the probability that we will be allowed to go outside?\\nSolution: We split this into the case that it rains and the case that it doesn't. The probability that it rains and we go outside is (0.20)(0.10) = 0.02. The probability that it doesn't rain and we go outside is (1 - 0.20)(0.80) = 0.64. The overall probability that we go outside is then the sum of these, or 0.64 + 0.02 = 0.66."
+    },
+    {
+      "role": "assistant",
+      "content": "def probability_rain_and_go_outside (p_rain : ℝ) (p_go_outside_if_rain : ℝ) : ℝ :=\\np_rain * p_go_outside_if_rain\\n\\ndef probability_no_rain_and_go_outside (p_rain : ℝ) (p_go_outside_if_no_rain : ℝ) : ℝ :=\\n(1 - p_rain) * p_go_outside_if_no_rain\\n\\ndef total_probability_go_outside (p_rain p_go_outside_if_rain p_go_outside_if_no_rain : ℝ) : ℝ :=\\nprobability_rain_and_go_outside p_rain p_go_outside_if_rain + probability_no_rain_and_go_outside p_rain p_go_outside_if_no_rain\\n-- Applying the example values\\ntheorem example_26_12 : total_probability_go_outside 0.20 0.10 0.80 = 0.66 :=\\nby rw [total_probability_go_outside, probability_rain_and_go_outside, probability_no_rain_and_go_outside, mul_comm 0.20 0.10, mul_comm (1 - 0.20) 0.80, mul_one 0.10, mul_one 0.80, sub_self, zero_add]"
+    },
+    {
+      "role": "user",
+      "content": "Let's start with linear equations in one variable, like 3y + 4 = -5. We solve these with two steps: first move all the constants to one side of the equation and the variable to the other by subtraction and addition; then divide both sides by the coefficient of the variable."
+    },
+    {
+      "role": "assistant",
+      "content": "example (h : 3 * y + 4 = -5) : y = -3 :=\\nhave h1 : 3 * y = -5 - 4 := linarith [h]\\nhave h2 : 3 * y = -9 := congr_arg (λ x, x - 4) h\\nhave h3 : y = -9 / 3 := (eq_div_of_mul_eq (by norm_num : 3 ≠ 0) h2).symm\\neq_of_div_eq_mul (by norm_num : 3 ≠ 0) h3"
+    },
+    {
+      "role": "user",
+      "content": "EXAMPLE 3-6 Solve the system of equations\n2x - 4y = 7\nx - 2 y = 2.\nSolution: If we try elimination we will get the astonishing result 0 = 3. (Try it.) Since this can never be true, we deduce that there are never any solutions to this system. Indeed, if we graph the lines, we will find that they are parallel. Since parallel lines never intersect, the system can have no solutions."
+    },
+    {
+      "role": "assistant",
+      "content": "import algebra.linear_algebra.basic\r\n\r\n-- Define the coefficients of the system of equations\r\ndef a1 : matrix (fin 2) (fin 2) ℝ := ![![2, -4], ![1, -2]]\r\ndef b1 : matrix (fin 2) (fin 1) ℝ := ![![7], ![2]]\r\n\r\n-- Check if the system of equations has no solution by showing the determinant is zero\r\ntheorem no_solution_parallel_lines : a1.det = 0 :=\r\nbegin\r\n  simp [a1, matrix.det_fin_two, sub_eq_add_neg],\r\n  linarith,\r\nend\r\n\r\n-- Alternatively, we can show that the system is inconsistent by attempting to solve it and deriving a contradiction\r\ntheorem inconsistent_system : false :=\r\nbegin\r\n  -- Expressing the equations in matrix form\r\n  let eq1 : fin 2 → ℝ := ![2, -4],\r\n  let eq2 : fin 2 → ℝ := ![1, -2],\r\n  let vals : fin 2 → ℝ := ![7, 2],\r\n\r\n  -- Attempting elimination on the system of equations\r\n  have h1 : eq1 0 - 2 * eq2 0 = vals 0 - 2 * vals 1,\r\n  { simp, norm_num },\r\n  \r\n  -- We obtain the equation 0 = 3, which is a contradiction\r\n  have h2 : 0 = 3,\r\n  { calc\r\n      0 : eq1 0 - 2 * eq2 0\r\n    ... = 2 - 2 * 1 : by simp [eq1, eq2]\r\n    ... = 2 - 2 : by rw mul_one\r\n    ... = 0 : by linarith\r\n    ... = 7 - 2 * 2 : by simp [vals]\r\n    ... = 3 : by linarith },\r\n\r\n  -- This contradiction implies that our initial assumption is false and the system has no solution\r\n  contradiction,\r\nend\r\n\r\n-- This theorem confirms that the system has no solution by checking the determinant\r\ntheorem no_solution_by_determinant : ¬ ∃ (x y : ℝ), 2 * x - 4 * y = 7 ∧ x - 2 * y = 2 :=\r\nbegin\r\n  -- Assume there is a solution (x, y)\r\n  rintro ⟨x, y, h1, h2⟩,\r\n  -- From the second equation, we express x in terms of y\r\n  have hx : x = 2 * y + 2,\r\n  { linarith },\r\n\r\n  -- Substitute x into the first equation and obtain a contradiction\r\n  have h : 2 * (2 * y + 2) - 4 * y = 7,\r\n  { linarith [h1, hx] },\r\n\r\n  -- Simplify to get the contradiction 0 = 3\r\n  simp at h,\r\n  linarith,\r\nend"
+    },
+    {
+      "role": "user",
+      "content": "EXAMPLE 3-7 Solve the system of equations\n2x - 2 y = 6 \nx - y = 3.\nSolution: If we try elimination here, we get 0 = 0. This means that the equations are identical; in fact, the first equation is exactly twice the second. They describe the same line! All the solutions to one equation are also solutions to the other, so there are infinitely many solutions."
+    },
+    {
+      "role": "assistant",
+      "content": "import algebra.linear_algebra.basic\r\n\r\n-- Define the coefficients of the system of equations\r\ndef a2 : matrix (fin 2) (fin 2) ℝ := ![![2, -2], ![1, -1]]\r\ndef b2 : matrix (fin 2) (fin 1) ℝ := ![![6], ![3]]\r\n\r\n-- Check if the system of equations has infinitely many solutions by showing the determinant is zero\r\ntheorem infinitely_many_solutions_same_line : a2.det = 0 :=\r\nbegin\r\n  simp [a2, matrix.det_fin_two, sub_eq_add_neg],\r\n  linarith,\r\nend\r\n\r\n-- Show that the two equations are multiples of each other, confirming they are the same line\r\ntheorem same_line : ∀ (x y : ℝ), (2 * x - 2 * y = 6) ↔ (x - y = 3) :=\r\nbegin\r\n  intros x y,\r\n  split; intro h,\r\n  {\r\n    -- From the first equation to the second\r\n    linarith,\r\n  },\r\n  {\r\n    -- From the second equation to the first\r\n    linarith,\r\n  }\r\nend\r\n\r\n-- Expressing the solution set in terms of a parameter t\r\ndef solution_set (t : ℝ) : (ℝ × ℝ) := (t + 3, t)\r\n\r\n-- Verify that for any real number t, the pair (t + 3, t) is a solution to both equations\r\ntheorem all_solutions (t : ℝ) : 2 * (t + 3) - 2 * t = 6 ∧ (t + 3) - t = 3 :=\r\nbegin\r\n  split; linarith,\r\nend\r\n\r\n-- This theorem confirms that there are infinitely many solutions, given by the parameter t\r\ntheorem infinite_solutions_by_parameterization : ∃ (f : ℝ → ℝ × ℝ), ∀ t : ℝ, (2 * (f t).fst - 2 * (f t).snd = 6) ∧ ((f t).fst - (f t).snd = 3) :=\r\nbegin\r\n  -- Define the function that gives all the solutions\r\n  use solution_set,\r\n  -- Show that for any t, the function solution_set gives a solution to the system\r\n  intros t,\r\n  exact all_solutions t,\r\nend"
+    }
+  ],
+  "temperature": 0.7,
+  "top_p": 0.95,
+  "frequency_penalty": 0,
+  "presence_penalty": 0,
+  "max_tokens": 800,
+  "stop": null
+}

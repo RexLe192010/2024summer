@@ -1,0 +1,32 @@
+由于线性方程过分简单，导致gpt4在较多要求下会直接生成最终答案；刚刚本来想着再去尝试最大公约数，不过也比较复杂，所以还是算了；
+
+前面其实额外尝试了一下新的system message: You are an AI assistant that translates natural language to Lean 4. Output the very first step of solution instead of final result. The proof should be replaced by "sorry" tactic. Do not use begin/end.
+
+这个起到了不错的效果，具体请看3-2-sorry/sorry-7.json/lean
+
+
+
+接下来要开始自动化整个流程了，
+
+[11:48 AM] Xian Zhang
+我觉得可以尝试自动化了
+[11:49 AM] Xian Zhang
+Xinyi你先熟悉一下这个repo的代码：https://dev.azure.com/ai4m/BetaInequality
+[11:49 AM] Xian Zhang
+然后我会给你一个linux服务器的ip以及用户名密码，你可以在这个服务器上去安装和运行这个repo的代码
+[11:52 AM] Xian Zhang
+20.14.89.102
+[11:52 AM] Xian Zhang
+用户名:argustest
+密码是Argus123456789
+然后回头我让Wen跟你说一下这个框架的代码和安装步骤，应该是很好弄的
+
+
+然后顺着那一份readme文件安装，一开始都没什么问题，直到运行test_lean_interface的时候，
+
+print("Hello!")
+e0, ps = thm.declare('import Math\nopen Real Nat')
+print("Hello!")
+pftree = thm.pftree
+
+第二行代码一直卡着不进行下去，足足卡了40分钟之后，放弃，还是交给明天的我来做吧

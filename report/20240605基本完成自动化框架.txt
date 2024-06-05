@@ -1,0 +1,19 @@
+今天我想要整理一下关于自然语言，latex，lean4代码，以及python里面的string之间的转化
+
+自然语言转化成latex还是比较明了的，就是多加了一些\section，\textbf{}之类的标签，其他文字内容还是一样的
+
+但是从latex（经过python string处理）变成lean4的过程是稍微有点特别的，latex内部的换行使用\\或者是\\\\实现的，如果单纯按照段落分割可能会出现截取不完整的情况，以下是例子：
+
+EXAMPLE 3-7 Solve the system of equations
+2x - 2 y = 6 
+x - y = 3.
+Solution: If we try elimination here, we get 0 = 0. This means that the equations are identical; in 
+fact, the first equation is exactly twice the second. They describe the same line! All the solutions to 
+one equation are also solutions to the other, so there are infinitely many solutions.
+
+这个example应当要被当成是完整的模块，但是中间从x - y = 3到solution明显有个换段落，在python中进行string处理（splitting）的时候可能会将其当成两段内容
+
+经过调试，基本上需要做的就是wen把生成的latex转化成json/python string的格式，然后我将根据\n\n进行分段，每个段落作为gpt4学习/做题的部分
+现在已经能够让逐步生成lib和solution，还差三个部分：生成的lib和solution的完整流程要用trace file记录下来；solution的部分要通过youle的验证框架进行测试，如果错误要重新生成lib；生成的lib要以lean4的形式保存起来
+
+最后稍微对gpt utils new和llm auto进行了修改，实现了logging和保存到lean4 file的功能；明后天可能着重写测试lean4代码的部分

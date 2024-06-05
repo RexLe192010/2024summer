@@ -1,0 +1,18 @@
+今天接着上次做完了各种组合，因为主要是探究gpt4的auto-formalization和学习之前生成的lean的能力，需要重新设计template以及examples
+重点并不在于gpt4生成时的syntactic的问题，而是期待其调用之前lib的能力，因此本次试验将会把所有证明部分变成sorry
+
+template：
+1. Solve for x : x + 4 = 5.
+
+-- Equation x + 4 = 5
+def solve_linear_equation_1 (a b : R) (h : a + 4 = 5) : a = 5 - 4 := sorry
+
+2. Let's start with linear equations in one variable, like 3y + 4 = -5. We solve these with two steps: first move all the constants to one side of the equation and the variable to the other by subtraction and addition; then divide both sides by the coefficient of the variable.
+
+-- Equation 3y + 4 = -5
+def solve_linear_equation_2 (c d : R) (h : 3 * c + 4 = -5) : 3 * c = -5 - 4 := sorry
+
+3. Solve for z : 7z − 2 = 5z + 10
+
+-- Equation 7z − 2 = 5z + 10
+def solve_linear_equation_3 (e f : R) (h : 7 * e − 2 = 5 * e + 10) : 7 * e - 5 * e = 10 + 2 := sorry

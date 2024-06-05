@@ -1,0 +1,46 @@
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are an AI agent that translates Latex to Lean4. The input is always a paragraph in Latex from some Mathematics textbook. You should conclude the paragraph in Lean4, by generating examples, definitions, functions, or theorems, so that it becomes a Lean4 library for further use."
+    },
+    {
+      "role": "user",
+      "content": "\\documentclass{article}\\usepackage{amsmath}\\begin{document}\\textbf{EXAMPLE 26-12} There is a 20\\% chance it will rain today. If it rains, there is a 10\\% chance that we will be allowed to go outside; otherwise, there is an 80\\% chance we will be able to go outside. What is the probability that we will be allowed to go outside?\\noindent \\textbf{Solution:} We split this into the case that it rains and the case that it doesn't. The probability that it rains and we go outside is $(0.20)(0.10) = 0.02$. The probability that it doesn't rain and we go outside is $(1 - 0.20)(0.80) = 0.64$. The overall probability that we go outside is then the sum of these, or $0.64 + 0.02 = 0.66$.\\end{document}"
+    },
+    {
+      "role": "assistant",
+      "content": "def probability_rain_and_go_outside (p_rain : ℝ) (p_go_outside_if_rain : ℝ) : ℝ :=\\np_rain * p_go_outside_if_rain\\n\\ndef probability_no_rain_and_go_outside (p_rain : ℝ) (p_go_outside_if_no_rain : ℝ) : ℝ :=\\n(1 - p_rain) * p_go_outside_if_no_rain\\n\\ndef total_probability_go_outside (p_rain p_go_outside_if_rain p_go_outside_if_no_rain : ℝ) : ℝ :=\\nprobability_rain_and_go_outside p_rain p_go_outside_if_rain + probability_no_rain_and_go_outside p_rain p_go_outside_if_no_rain\\n-- Applying the example values\\ntheorem example_26_12 : total_probability_go_outside 0.20 0.10 0.80 = 0.66 :=\\nby rw [total_probability_go_outside, probability_rain_and_go_outside, probability_no_rain_and_go_outside, mul_comm 0.20 0.10, mul_comm (1 - 0.20) 0.80, mul_one 0.10, mul_one 0.80, sub_self, zero_add]"
+    },
+    {
+      "role": "user",
+      "content": "\\documentclass{article}\\usepackage{amsmath}\\begin{document}Let's start with linear equations in one variable, like $3y + 4 = -5$. We solve these with two steps: first, move all the constants to one side of the equation and the variable to the other by subtraction and addition; then divide both sides by the coefficient of the variable.\\begin{align*}3y + 4 &= -5 && \\text{(original equation)} \\\\3y + 4 - 4 &= -5 - 4 && \\text{(subtract 4 from both sides)} \\\\3y &= -9 && \\text{(simplify)} \\\\\\frac{3y}{3} &= \\frac{-9}{3} && \\text{(divide both sides by 3)} \\\\y &= -3 && \\text{(solution)}\\end{align*}\\end{document}"
+    },
+    {
+      "role": "assistant",
+      "content": "example (h : 3 * y + 4 = -5) : y = -3 :=\\nhave h1 : 3 * y = -5 - 4 := linarith [h]\\nhave h2 : 3 * y = -9 := congr_arg (λ x, x - 4) h\\nhave h3 : y = -9 / 3 := (eq_div_of_mul_eq (by norm_num : 3 ≠ 0) h2).symm\\neq_of_div_eq_mul (by norm_num : 3 ≠ 0) h3"
+    },
+    {
+      "role": "user",
+      "content": "\\documentclass{article}  \n\\usepackage{amsmath}  \n  \n\\begin{document}  \n  \n\\textbf{EXAMPLE 3-6} Solve the system of equations  \n\\begin{align*}  \n2x - 4y &= 7 \\\\  \nx - 2y &= 2.  \n\\end{align*}  \n\\textbf{Solution:} If we try elimination, we will get the astonishing result $0 = 3$. (Try it.) Since this can never be true, we deduce that there are never any solutions to this system. Indeed, if we graph the lines, we will find that they are parallel. Since parallel lines never intersect, the system can have no solutions.  \n  \n\\end{document}"
+    },
+    {
+      "role": "assistant",
+      "content": "import algebra.group -- for the basic algebraic structures and operations\r\nimport tactic -- for the tactics like linarith\r\n\r\n-- Let's define a structure for the system of equations in Lean\r\nstructure linear_system :=\r\n(a1 : ℚ) (b1 : ℚ) (c1 : ℚ) -- coefficients and constant term for the first equation\r\n(a2 : ℚ) (b2 : ℚ) (c2 : ℚ) -- coefficients and constant term for the second equation\r\n\r\n-- Here's the example provided in Lean4, using rational numbers (ℚ)\r\ndef example_system : linear_system :=\r\n{ a1 := 2, b1 := -4, c1 := 7,\r\n  a2 := 1, b2 := -2, c2 := 2 }\r\n\r\n-- Let's define a theorem statement for the given system\r\ntheorem example_3_6_no_solution (sys : linear_system) (h1 : sys.a1 / sys.b1 = sys.a2 / sys.b2) (h2 : sys.a1 / sys.c1 ≠ sys.a2 / sys.c2) :\r\n  ¬∃ (x y : ℚ), sys.a1 * x + sys.b1 * y = sys.c1 ∧ sys.a2 * x + sys.b2 * y = sys.c2 :=\r\nbegin\r\n  -- Using the contradiction tactic to prove by contradiction\r\n  rintro ⟨x, y, h3, h4⟩,\r\n  have h5 : (sys.a1 * x + sys.b1 * y) / sys.b1 = (sys.a2 * x + sys.b2 * y) / sys.b2, by rw [h3, h4],\r\n  have h6 : (sys.a1 / sys.b1) * x + y = (sys.a2 / sys.b2) * x + y, by rwa [div_add_div_same, div_add_div_same] at h5,\r\n  have h7 : ((sys.a1 / sys.b1) - (sys.a2 / sys.b2)) * x = 0, by linarith,\r\n  have h8 : sys.a1 / sys.b1 ≠ sys.a2 / sys.b2, by exact h2,\r\n  have h9 : x = 0, by exact (eq_zero_of_mul_eq_zero_right h8 h7),\r\n  subst h9,\r\n  simp at h3,\r\n  linarith,\r\nend\r\n\r\n-- Now we can apply this theorem to the specific example\r\nexample : ¬∃ (x y : ℚ), 2 * x - 4 * y = 7 ∧ x - 2 * y = 2 :=\r\nbegin\r\n  apply example_3_6_no_solution example_system,\r\n  norm_num, -- verifies the ratio of coefficients of x is equal\r\n  norm_num, -- verifies the ratio of coefficients and constants is not equal\r\nend"
+    },
+    {
+      "role": "user",
+      "content": "\\documentclass{article}  \n\\usepackage{amsmath}  \n  \n\\begin{document}  \n  \n\\textbf{EXAMPLE 3-7} Solve the system of equations  \n\\begin{align*}  \n2x - 2y &= 6 \\\\  \nx - y &= 3.  \n\\end{align*}  \n\\textbf{Solution:} If we try elimination here, we get $0 = 0$. This means that the equations are identical; in fact, the first equation is exactly twice the second. They describe the same line! All the solutions to one equation are also solutions to the other, so there are infinitely many solutions.  \n  \n\\end{document}"
+    },
+    {
+      "role": "assistant",
+      "content": "import algebra.group -- for the basic algebraic structures and operations\r\nimport tactic -- for the tactics like linarith\r\n\r\n-- Let's define a structure for the system of equations in Lean\r\nstructure linear_system :=\r\n(a1 : ℚ) (b1 : ℚ) (c1 : ℚ) -- coefficients and constant term for the first equation\r\n(a2 : ℚ) (b2 : ℚ) (c2 : ℚ) -- coefficients and constant term for the second equation\r\n\r\n-- Here's the example provided in Lean4, using rational numbers (ℚ)\r\ndef example_system : linear_system :=\r\n{ a1 := 2, b1 := -2, c1 := 6,\r\n  a2 := 1, b2 := -1, c2 := 3 }\r\n\r\n-- Define a theorem statement for the given system\r\ntheorem example_3_7_infinite_solutions (sys : linear_system) (h1 : sys.a1 / sys.a2 = sys.b1 / sys.b2) (h2 : sys.a1 / sys.a2 = sys.c1 / sys.c2) :\r\n  ∀ (k : ℚ), ∃ (x y : ℚ), x - y = k :=\r\nbegin\r\n  intro k,\r\n  use (k + sys.c2 / sys.a2),\r\n  use (sys.c2 / sys.a2),\r\n  have h : sys.a2 * (k + sys.c2 / sys.a2) - sys.a2 * (sys.c2 / sys.a2) = sys.a2 * k, by ring,\r\n  rw [mul_sub, div_mul_cancel _ (ne_of_gt (by norm_num : 0 < sys.a2)), h],\r\nend\r\n\r\n-- Now we can show that any real number k can be the difference x - y in the system of equations\r\nexample (k : ℚ) : ∃ (x y : ℚ), x - y = k :=\r\nbegin\r\n  apply example_3_7_infinite_solutions example_system,\r\n  norm_num, -- verifies the ratio of coefficients of x is equal\r\n  norm_num, -- verifies the ratio of coefficients and constants is equal\r\nend"
+    }
+  ],
+  "temperature": 0.7,
+  "top_p": 0.95,
+  "frequency_penalty": 0,
+  "presence_penalty": 0,
+  "max_tokens": 800,
+  "stop": null
+}

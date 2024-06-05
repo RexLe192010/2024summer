@@ -1,0 +1,21 @@
+上午把整个BetaInequality的repo都过了一遍，基本上理解了每个function的作用
+
+但是现在的问题是接下去我需要做什么我还不是很清楚，需要去问宪哥了解一下
+
+以后azure对于gpt4的使用有了新的政策，所以根据要求稍微改了一下gpt_utils.py这份文件，但是根据xian的说法，他会进行相应的sample code的修改
+
+任务下来了：
+[3:25 PM] Xian Zhang
+现在需要Xinyi你把之前手动的操作自动化，比如假定那儿已经有一堆的自然语言的数学描述，需要借助这个框架来做三件事:(1)概念以及定理的autoformalization, (2) 根据习题和之前生成的autoformalization来做习题 （3）根据习题答案修正autoformalization
+[3:26 PM] Xian Zhang
+我们可以一件件来，比如先做第一件事autoformalization的话，需要保证autoformalization没有syntax error
+[3:26 PM] Xian Zhang
+然后Wen那边会用gpt-4v的模型来生成自然语言的数学描述，就可以跟你这边接起来了
+[3:28 PM] Xinyi Le (FESCO Adecco Human Resources)
+好的，那我先新开个文件写起来
+[3:29 PM] Xian Zhang
+嗯嗯，因为现在的框架已经可以提供一些feedback了，只是之前和inequation绑定的，可能需要你抽一些逻辑出来
+
+
+
+今天稍微写了一点代码，一方面把新的azure api给写了一下，在gpt_utils_new.py中；另一方面稍微写了一点llm_auto.py，这个是接下去一段时间的主要任务，即自动化学习过程

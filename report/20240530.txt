@@ -1,0 +1,42 @@
+今天我一上来就问了Wen Tang有关test_lean_interface没有进展的原因，大概率是因为没有装maple
+
+这个maple是一个破解版，需要装maple的同时有license啥的，这个我到下午的时候争取用scp指令扒下来，以后可以自己用
+
+Azure DevOps token: XinyiLe
+密码：xyd5wsfr6vgir4gb5c2mmjbsgdodnx4ss4qeo6snwuuljlicmu5q
+
+以及服务器的SSH key需要上传到github，这样才能保证git clone能够正常克隆repo
+
+
+还有一件需要注意的，就是gpt_api_key.py需要在lean_interface下方的utils文件夹中创建一下，并复制
+gpt_4_turbo_list = [
+("https://ai4mtest1.openai.azure.com/",
+"f6052a23f2154134bd7ed1e37c896814"),
+("https://ai4mtest10.openai.azure.com/",
+"36e3e1c4d4ca403d8842efa13cfdd918"),
+("https://ai4mtest3.openai.azure.com/"
+,"9b888062bda54d90b838e0a6dc76da41"),
+("https://ai4mtest7.openai.azure.com/",
+"ee2cbb8fda114a509317d2a2c4a703bc"),
+("https://ai4mtest8.openai.azure.com/",
+"e0f5b4e9daae45419068360d9ced2bcf"),
+("https://ai4mtest9.openai.azure.com/",
+"aa1dc0d5e551408ca9b5c36b1e830431"),
+("https://ai4mtest6.openai.azure.com/",
+"7c08884cc0a14252ac25ffc68591db6f"),
+("https://ai4mtest2.openai.azure.com/",
+"3ee8a8b1a59f4368a90e56f5aa207eb3"),
+("https://ai4mtest5.openai.azure.com/",
+"9c920db4ba2b46cf941447a7f2d03281")
+]
+进去
+
+
+
+如何验证环境配置+仓库克隆完全搞定：将test_lean_interface跑通就行（是一个jupyter notebook类型）
+
+
+
+在这之后去开了个小会，聊了一下今后的发展，大致方向就是探索大语言模型是否具有学习数学的能力（真是触及本质的玩意儿）
+大致框架分成了GV，即generate和validation，generate是让gpt4生成，validation是用lean4进行验证，我接下去要做的就是validation部分，让lean能够生成证明步骤
+具体来说就是lean_interface的总体代码需要由我来写/改
