@@ -1,0 +1,9 @@
+上周就我的代码做了一些讨论，简单来说就是验证的部分要补上，然后prompt可以设计的再简单一些，最好能观察gpt使用新lib，并且修改原有lib的能力
+
+同时我也在同步进行学校的research项目，现在得搞清楚FSM那个代码是怎么运行的
+
+
+今日份token：iojzppz5tp3auvhx66eljmvim2jddxjwx4mmuyolkgptrczgaosa
+
+下午一方面把上次小会议中提到的eval流程implement了一下，同时还花了大把时间把lean传给repl的框架写好了
+跟youle曾经写的框架不同的一点是，他的框架用于一步步检测证明步骤，而我的只是获取lean对于完整流程的反馈，因此写一个新框架难度并不是很高

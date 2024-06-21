@@ -1,0 +1,15 @@
+rbijp3pcey26aq75d2fi2ojuwm4ounhfoxaga3nt5eehonwy73ka
+新的azure devops token
+
+
+搞了半天一直不知道为什么会出现unknown package "Mathlib"，读了官网和自己摸索之后搞懂了：包含mathlib的文件需要放到lean project的内目录当中，而不是跟lakefile.lean放在同一级
+
+总之再折腾一两天这个unknown package的问题应该就能搞定了；根据宪哥的说法，wen已经写好了简单的读取框架，可以把两者结合起来试一试效果
+[1:45 PM] Xian Zhang
+Xinyi, Wen已经实现了一个ocr以及auto的简单框架，是基于gpt4以及gpt4o来做的，你可以试着把这部分和你那儿的代码合一下？
+ 
+[1:46 PM] Xian Zhang
+Wen这个代码之前auto过一个500多页的pdf，正确率还蛮高的
+ 
+[1:46 PM] Xian Zhang
+prompt可能你得改一下，以及把feedback的机制也加进去
