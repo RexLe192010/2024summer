@@ -1,0 +1,111 @@
+今天一来先运行了一下study.py，跑下来的反馈如下：
+1. 语法问题基本能够在几次运行之后能够修正过来
+2. 最后一道题做的是正确的（2.5）
+3. 最后一道题用到了collect terms，虽然不算是直接调用function，但是这个操作算是在学习library中的操作
+4. 跟宪哥讨论下来，可以先往后续retrieval发展，然后等到lib扩大之后再考虑general的问题
+
+所以接下去就是retrieval咯！！
+[1:52 PM] Xian Zhang
+嗯嗯，我先发一个链接给你
+ 
+[1:52 PM] Xian Zhang
+https://learn.microsoft.com/en-us/semantic-kernel/concepts/plugins/using-data-retrieval-functions-for-rag
+Retrieve data from plugins for RAG | Microsoft Learn
+Learn how to statically and dynamically retrieve data from plugins for Retrieval Augmented Generation (RAG) in Semantic Kernel.
+ 
+[1:53 PM] Xian Zhang
+我们可以试着基于semantic kernel来开发retrieval功能（这个可能可以写到简历里）
+ 
+[1:53 PM] Xian Zhang
+然后我这儿有个没有retrieval的但是用了semantic kernel的llm查询代码
+ 
+[1:54 PM] Xian Zhang
+XInyi你可以基于我那个代码，或者semantic kernel官网包括官方github上的例子来实现retrieval
+
+[1:56 PM] Xian Zhang
+import asyncio
+from semantic_kernel import Kernel
+from semantic_kernel.connectors.ai.open_ai import  AzureChatCompletion
+from semantic_kernel.connectors.ai.open_ai import AzureChatPromptExecutionSettings  # noqa: F401
+from semantic_kernel.connectors.ai.open_ai import (
+    AzureChatCompletion,
+    # AzureTextCompletion,
+)
+from semantic_kernel.contents import ChatHistory  # noqa: F401
+# from semantic_kernel.prompt_template import PromptTemplateConfig
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+ 
+kernel = Kernel()
+ 
+# If you're using your corp account
+# credential = DefaultAzureCredential()
+credential = DefaultAzureCredential(managed_identity_client_id="7e0d39de-9cb1-4585-85af-1e82ea00b36d")
+# chat_model_deployment = os.getenv("OPENAI_CHAT_MODEL")
+token_provider = get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default")
+ 
+# Prepare OpenAI service using credentials stored in the `.env` file
+service_id="aoai_chat"
+# kernel.add_service(
+#     OpenAIChatCompletion(
+#         service_id=service_id,
+#     )
+# )
+ 
+# Alternative using Azure:
+azure_chat_service = AzureChatCompletion(
+      service_id=service_id,
+      endpoint="https://ai4mtest10.openai.azure.com/",
+      deployment_name="gpt-4",
+      api_version="2024-02-01",
+      ad_token_provider=token_provider,
+  )
+ 
+az_oai_chat_prompt_execution_settings = AzureChatPromptExecutionSettings(
+    service_id="aoai_chat",
+    max_tokens=2000,
+    temperature=0.7,
+    top_p=1,
+    frequency_penalty=0.5,
+    presence_penalty=0.5,
+)
+# Run your prompt
+# Note: functions are run asynchronously
+async def main():
+    content = "You are an AI assistant that helps people find information. Be concise, technical and professional."
+    chat = ChatHistory()
+    chat.add_system_message(content)
+    while True:
+        request = input("You:\n")
+        chat.add_user_message(request)
+        stream = azure_chat_service.get_streaming_chat_message_contents(
+            chat_history=chat, settings=az_oai_chat_prompt_execution_settings
+        )
+        print("AI:")
+        async for text in stream:
+            print(str(text[0]), end="")  # end = "" to avoid newlines
+        print("\n")
+if __name__ == "__main__":
+    asyncio.run(main())
+# If running from a jupyter-notebook:
+# await main()
+ 
+ 
+ 
+[1:56 PM] Xian Zhang
+这个应该在azure的服务器上都能运行
+ 
+[1:56 PM] Xian Zhang
+是一个命令行的chatgpt，实际上就是调用了semantic kernel的chathistory()函数
+ 
+[1:57 PM] Xian Zhang
+然后semantic kernel也有不少例子是关于retrieval的，应该和这个代码组合一下就能运行起来
+ 
+[1:57 PM] Xian Zhang
+一开始Xinyi你可以不用管lib，先争取把官方的一些例子跑通
+ 
+[1:58 PM] Xian Zhang
+然后再看怎么集成
+
+
+下午稍微看了一下相关网站，内容很多，需要花一定时间才能弄明白semantic kernel是什么意思
+ 

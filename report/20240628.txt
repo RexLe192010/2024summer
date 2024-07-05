@@ -1,0 +1,11 @@
+本来以为今天有组会就来看一下，没想到是每两周有一次，大意了……
+
+
+今天继续昨天的retrieval学习；
+刚刚2：43的时候，成功运行了宪哥昨天发给我的文件；
+
+一整天都在读文档，并且问gpt问题，但是最关键的问题并不是我最重要运行哪份文件，而是搞清楚semantic kernel和retrieval的关系
+我对此的总结是：semantic kernel（语义内核）提供了对自然语言的处理，提取出prompt/query中最重要的信息并且交给retrieval（检索）功能，让其在很大的database中寻找相关的数据；
+同时，semantic kernel+retrieval = semantic search跟gpt的差别在于，semantic search并非返回一段流畅的自然语言，而是一个搜索技术，用于理解和匹配查询与文档之间的语义关系
+
+在尝试理解的过程中还是有不少问题，下周再问问宪哥再说吧

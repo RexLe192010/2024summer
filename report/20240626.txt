@@ -1,0 +1,15 @@
+昨天摆了一天没去上班，今天一早就来了
+
+我现在逐渐有理由怀疑是我的example没有设计好
+
+token：cnq6zxo6tckj66xylm7uzk4wloese22pxdl4uxvox6torrhpokxq
+
+今天继续着重于prompt和example的修改；上午把rationale改了些，然后顺便也把convert（PDF转latex的流程）中用到gpt4v的部分重写了prompt
+
+下午主要修改了以下部分：
+1. system message中，修改了“要求GPT使用lib中的definition”的prompt语句
+2. example中，修改了“theorem，rationale，eval”相关的配套用法，主要体现在“-- Thought process”“theorem”相关的添加
+3. solve_quiz函数中，要求gpt "Mention any of the definitions from the library in your solution"
+4. fix_syntax_general函数中，要求要求gpt在碰到noncomputable问题时，将R替换成Q（牢版本），同时删除“noncomputable”一词
+
+这些修改不代表最终版本，由于环节很多所以仍需更多调试，理论上来讲原先的版本也有可取之处，需要结合更多章节进行修改

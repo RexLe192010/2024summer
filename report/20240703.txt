@@ -1,0 +1,32 @@
+今天继续摸索如何跑通那几个notebooks，因为那几个notebooks跟我接下去要做的十分相似
+
+昨天卡在各项deployment name，今天试出来这个：
+GLOBAL_LLM_SERVICE="AzureOpenAI"
+OPENAI_API_KEY=""
+OPEN_AI_CHAT_MODEL_ID=""
+OPEN_AI_TEXT_MODEL_ID=""
+OPEN_AI_EMBEDDING_MODEL_ID=""
+OPENAI_ORG_ID=""
+AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4"
+AZURE_OPENAI_TEXT_DEPLOYMENT_NAME="gpt-35-turbo"
+AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME="text-embedding-3-large"
+AZURE_OPENAI_ENDPOINT="https://aimtest14.openai.azure.com/"
+AZURE_OPENAI_API_KEY=""
+AZURE_AISEARCH_API_KEY=""
+AZURE_AISEARCH_URL=""
+
+AZURE_OPENAI_TEXT_DEPLOYMENT_NAME="gpt-35-turbo"这一部分是的text completion功能得到完善，1011都能跑通了，还剩个06，需要的是AISearch API
+
+
+前面和宪哥sync了一下，总结：
+1. semantic kernel是一个主要用在某些部门的产品开发的过程，通过LLM调用plugin的方式增强了大语言模型在某些特殊领域的能力
+2. 一开始让我使用semantic kernel并非是为了调取教材对应的答案内容，而是在生成lean library之后在后续做题时能够用retrieval的方式call most related functions
+3. semantic kernel是一个比较完备的功能，我在后续的操作中并不需要用到semantic kernel
+4. 虽然不用semantic kernel，但是检索还是需要的，因此决定直接使用BERT模型的embedding，然后算一下cos similarity（不是很复杂，直接调用已有函数就行）
+5. cos similarity大概解释：使用BERT模型将两个string转化成embedding之后，两个向量算他们的夹角（夹角越小说明两段string越相关），夹角来自于点乘/模相乘。-1~1（1说明强相关）
+6. 我们打算用BERT和cos similarity来确定LLM在做数学题的时候调用的definition（可能选出top5或是top10相关的definitions）
+7. 同时我最开始需要做的是将以整个chapter拉出来跑一下，看看gpt在某一个章节的学习能力（当中需要使用embedding等操作让gpt选择相关函数）
+
+新token：zxdtpubk5wik6c7m5w3okmxpu5okrfolj6fni5yuotplsvzyjv5q
+
+这个链接：https://dev.azure.com/ai4m/_git/AutoMath?path=/fine_tune.py当中有我需要的BERT用法，可以直接拿来用

@@ -1,0 +1,72 @@
+昨天在家摆了一天没去上班，收到了宪哥的一些信息：
+
+[Yesterday 12:45 PM] Xian Zhang
+Xinyi,我看了下那天给你发的页面，C#和python的代码都有的，你得在上面选一下语言
+ 
+[Yesterday 12:45 PM] Xian Zhang
+ 
+[Yesterday 12:47 PM] Xian Zhang
+https://learn.microsoft.com/en-us/semantic-kernel/get-started/quick-start-guide?pivots=programming-language-python
+How to quickly start with Semantic Kernel | Microsoft Learn
+Follow along with Semantic Kernel's guides to quickly learn how to use the SDK
+ 
+[Yesterday 12:47 PM] Xian Zhang
+我看python语言下也有从外部读取信息的retrieval的例子
+ 
+[Yesterday 1:06 PM] Xian Zhang
+这儿有一系列的notebook的代码示例
+ 
+[Yesterday 1:08 PM] Xian Zhang
+可能直接看这个github页面更快，Xinyi你直接看06-memory-and-embeddings：https://github.com/microsoft/semantic-kernel/blob/main/python/samples/getting_started
+ 
+06-memory-and-embeddings.ipynb
+microsoft/semantic-kernel
+
+我可能还是有点着急了，先把每个notebook跑通再说
+
+11：05跑通了00-getting-started，但如果每次调用都需要自己填写token provider还是挺麻烦的
+11：27跑通了01
+11：54跑通了02
+12：01跑通了03
+12：31跑通0405
+
+
+GLOBAL_LLM_SERVICE="AzureOpenAI"
+OPENAI_API_KEY=""
+OPEN_AI_CHAT_MODEL_ID=""
+OPEN_AI_TEXT_MODEL_ID=""
+OPEN_AI_EMBEDDING_MODEL_ID=""
+OPENAI_ORG_ID=""
+AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4"
+AZURE_OPENAI_TEXT_DEPLOYMENT_NAME=""
+AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME="text-embedding-3-large"
+AZURE_OPENAI_ENDPOINT="https://aimtest14.openai.azure.com/"
+AZURE_OPENAI_API_KEY=""
+AZURE_AISEARCH_API_KEY=""
+AZURE_AISEARCH_URL=""
+
+大部分的notebooks都和这份.env文件相关，然后额外需要credentials和token provider，代码如下：
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+
+# The Azure Cognitive Services API requires an Azure Active Directory token for authentication
+credential = DefaultAzureCredential(managed_identity_client_id="7e0d39de-9cb1-4585-85af-1e82ea00b36d")
+token_provider = get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default")
+
+要注意需要在
+    azure_chat_service = AzureChatCompletion(
+        service_id=chat_service_id,
+        ad_token_provider=token_provider, 这个部分是需要自己添加的，即token provider
+    )
+
+
+15：19还在跑06，主要是额外需要
+api_key = os.getenv("AZURE_AI_SEARCH_API_KEY")
+endpoint = os.getenv("AZURE_AI_SEARCH_ENDPOINT")
+这两个信息可能还得额外去问一下
+
+15：26跑通07
+16：18跑通0809
+10暂时跑不通，因为需要text deployment
+11应该也是需要text deployment的
+
+最后跑下来06，10，11还需要search，API等一系列内容，需要明天问宪哥要
